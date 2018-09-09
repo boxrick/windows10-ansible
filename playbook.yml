@@ -1,0 +1,41 @@
+- hosts: windows
+  vars:
+    # Windows Connection Variables 
+    ansible_user: admin
+    ansible_password: password
+    ansible_connection: winrm
+    ansible_ssh_port: 5985
+    ansible_winrm_server_cert_validation: ignore
+   
+    # Install packages
+    package_list: 
+      - git
+      - googlechrome
+      - firefox
+      - atom
+      - winrar
+      - irfanview
+      - evernote
+      - transgui
+      - putty.install
+      - exiftool
+      
+  tasks:
+    - name: Install packages
+      win_chocolatey:
+        name: "{{ item }}"
+        state: present
+      with_items: "{{ package_list }}"
+
+    - name: Install Adobe Reader
+      win_chocolatey:
+        name: "adobereader"
+        version: "11.0.10"
+        ignore_checksums: yes
+
+    - name: Install all security, critical, and rollup updates
+      win_updates:
+        category_names:
+          - SecurityUpdates
+          - CriticalUpdates
+          - UpdateRollups
