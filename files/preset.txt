@@ -1,0 +1,152 @@
+# Modified presets
+
+RequireAdmin
+
+DisableTelemetry
+DisableWiFiSense
+# DisableSmartScreen
+DisableWebSearch
+DisableAppSuggestions
+DisableActivityHistory
+DisableBackgroundApps
+DisableLocationTracking
+DisableMapUpdates
+DisableFeedback
+DisableTailoredExperiences
+DisableAdvertisingID
+DisableWebLangList
+DisableCortana
+DisableErrorReporting
+# SetP2PUpdateLocal
+DisableDiagTrack
+DisableWAPPush
+# HideRecentJumplists
+
+# SetUACLow
+# EnableSharingMappedDrives
+DisableAdminShares
+# DisableSMB1
+# DisableSMBServer
+# DisableLLMNR
+# DisableNCSIProbe
+SetCurrentNetworkPrivate
+# SetUnknownNetworksPrivate
+# DisableNetDevicesAutoInst
+# EnableCtrldFolderAccess
+# DisableFirewall
+# DisableDefender
+# DisableDefenderCloud
+EnableF8BootMenu
+SetDEPOptOut
+# EnableCIMemoryIntegrity
+DisableScriptHost
+EnableDotNetStrongCrypto
+# EnableMeltdownCompatFlag
+
+# DisableUpdateMSRT
+# DisableUpdateDriver
+DisableUpdateRestart
+DisableHomeGroups
+DisableSharedExperiences
+DisableRemoteAssistance
+EnableRemoteDesktop
+DisableAutoplay
+DisableAutorun
+# EnableStorageSense
+# DisableDefragmentation
+# DisableSuperfetch
+# DisableIndexing
+# SetBIOSTimeUTC
+# EnableHibernation
+# DisableSleepButton
+# DisableSleepTimeout
+# DisableFastStartup
+
+DisableActionCenter
+HideAccountProtectionWarn
+DisableLockScreen
+# DisableLockScreenRS1
+HideNetworkFromLockScreen
+HideShutdownFromLockScreen
+DisableStickyKeys
+#ShowTaskManagerDetails
+ShowFileOperationsDetails
+# EnableFileDeleteConfirm
+HideTaskbarSearch
+HideTaskView
+ShowSmallTaskbarIcons
+SetTaskbarCombineWhenFull
+HideTaskbarPeopleIcon
+ShowTrayIcons
+DisableSearchAppInStore
+DisableNewAppPrompt
+# HideRecentlyAddedApps
+SetControlPanelSmallIcons
+#SetVisualFXPerformance
+# AddENKeyboard
+# EnableNumlock
+SetSoundSchemeNone
+DisableStartupSound
+DisableChangingSoundScheme
+
+ShowKnownExtensions
+ShowHiddenFiles
+# EnableFldrSeparateProcess
+# EnableRestoreFldrWindows
+# DisableSharingWizard
+HideSelectCheckboxes
+HideSyncNotifications
+HideRecentShortcuts
+SetExplorerThisPC
+HideQuickAccess
+ShowThisPCOnDesktop
+# ShowUserFolderOnDesktop
+# HideDesktopFromThisPC
+# HideDesktopFromExplorer
+HideDocumentsFromThisPC
+# HideDocumentsFromExplorer
+HideDownloadsFromThisPC
+# HideDownloadsFromExplorer
+HideMusicFromThisPC
+# HideMusicFromExplorer
+HidePicturesFromThisPC
+# HidePicturesFromExplorer
+HideVideosFromThisPC
+# HideVideosFromExplorer
+Hide3DObjectsFromThisPC
+# Hide3DObjectsFromExplorer
+# DisableThumbnails
+DisableThumbnailCache
+DisableThumbsDBOnNetwork
+
+DisableOneDrive
+#UninstallOneDrive
+UninstallMsftBloat
+UninstallThirdPartyBloat
+UninstallWindowsStore
+DisableXboxFeatures
+DisableAdobeFlash
+DisableEdgeShortcutCreation
+# UninstallMediaPlayer
+# UninstallInternetExplorer
+# UninstallWorkFolders
+# InstallLinuxSubsystem
+# InstallHyperV
+SetPhotoViewerAssociation
+AddPhotoViewerOpenWith
+# UninstallPDFPrinter
+#UninstallXPSPrinter
+#RemoveFaxPrinter
+# UninstallFaxAndScan
+
+# HideServerManagerOnLogin
+# DisableShutdownTracker
+# DisablePasswordPolicy
+# DisableCtrlAltDelLogin
+# DisableIEEnhancedSecurity
+# EnableAudio
+
+# UnpinStartMenuTiles
+# UnpinTaskbarIcons
+
+

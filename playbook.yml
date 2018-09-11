@@ -1,12 +1,5 @@
 - hosts: windows
   vars:
-    # Windows Connection Variables 
-    ansible_user: admin
-    ansible_password: password
-    ansible_connection: winrm
-    ansible_ssh_port: 5985
-    ansible_winrm_server_cert_validation: ignore
-   
     # Install packages
     package_list: 
       - git
@@ -19,7 +12,12 @@
       - transgui
       - putty.install
       - exiftool
-      
+
+    # Where is our working path on windows 10 host  
+    working_path: 'c:\Temp\w10setup\'
+   
+    # password to elevate as test user
+    ansible_become_password: password   
   tasks:
     - name: Install packages
       win_chocolatey:
@@ -27,15 +25,122 @@
         state: present
       with_items: "{{ package_list }}"
 
+    - name: Install treesize
+      win_chocolatey:
+        name: treesizefree
+        state: present
+        ignore_checksums: yes
+
     - name: Install Adobe Reader
       win_chocolatey:
         name: "adobereader"
         version: "11.0.10"
         ignore_checksums: yes
 
-    - name: Install all security, critical, and rollup updates
-      win_updates:
-        category_names:
-          - SecurityUpdates
-          - CriticalUpdates
-          - UpdateRollups
+    - name: Create setup directory
+      win_file:
+        path: "{{ working_path }}"
+        state: directory
+
+    # Pull down initial setup script - move this to an actual role
+    # ref https://github.com/Disassembler0/Win10-Initial-Setup-Script
+    - name: Download cleanup script to local linux host
+      get_url:
+        url: https://raw.githubusercontent.com/Disassembler0/Win10-Initial-Setup-Script/master/Win10.ps1
+        dest: files/Win10.ps1
+      delegate_to: localhost
+
+    - name: Copy config file
+      win_copy:
+        src: "files/{{ item }}"
+        dest: "{{ working_path }}"
+        force: no
+      with_items:
+        - preset.txt
+        - Win10.ps1
+
+    - name: Run config removal script
+      win_shell: powershell.exe -NoProfile -ExecutionPolicy Bypass -File Win10.ps1 -preset preset.txt >> c:\Temp\w10setup\setup.log
+      args:
+        chdir: c:\Temp\w10setup
+        creates: c:\Temp\w10setup\setup.log
+
+    # The below is just playing with examples fron 
+    # https://github.com/jborean93/packer-windoze/blob/master/roles/personalise/tasks/main.yml#L32-L49
+    - name: set show hidden files/folders and file extensions for the default user profile
+      win_regedit:
+        path: HKLM:\ANSIBLE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: "{{ item.name }}"
+        data: "{{ item.data }}"
+        type: dword
+        state: present
+        hive: C:\Users\Default\NTUSER.dat
+      loop:
+      - name: Hidden
+        data: 1
+      - name: HideFileExt
+        data: 0
+ 
+    - name: Disable Web Search
+      win_regedit:
+        path: HKLM:\ANSIBLE\SOFTWARE\Microsoft\Windows\CurrentVersion\Search
+        name: "{{ item.name }}"
+        data: "{{ item.data }}"
+        type: dword
+        state: present
+        hive: C:\Users\Default\NTUSER.dat
+      loop:
+      - name: BingSearchEnabled
+        data: 0
+      - name: CortanaConsent
+        data: 0
+
+    # Testing creating application shortcuts
+    - name: Create an application shortcut for an executable in PATH to your desktop
+      win_shortcut:
+        src: cmd.exe
+        dest: Desktop\Command prompt.lnk
+
+    - name: Chrome Test
+      win_regedit:
+        path: HKLM:\ANSIBLE\SOFTWARE\Policies\Google\Chrome
+        name: "{{ item.name }}"
+        data: "{{ item.data }}"
+        type: "{{ item.type }}"
+        state: present
+        hive: C:\Users\Default\NTUSER.dat
+      loop:
+      - name: PasswordManagerEnabled
+        data: 0
+        type: dword
+      - name: RestoreOnStartup
+        data: 4
+        type: dword
+      - name: HomepageIsNewTabPage
+        data: 0
+        type: dword
+      - name: HomepageLocation
+        data: www.google.com
+        type: string
+      register: reboot
+
+    ## Create a user and run a script under that user
+    - name: Ensure testuser
+      win_user:
+        name: testuser
+        password: password
+        state: present
+        groups:
+          - Administrators
+
+    - name: Run config removal script as test user
+      win_shell: powershell.exe -NoProfile -ExecutionPolicy Bypass -File Win10.ps1 -preset preset.txt >> c:\Temp\w10setup\setup_testuser.log
+      args:
+        chdir: c:\Temp\w10setup
+        creates: c:\Temp\w10setup\setup_testuser.log
+      become_user: testuser
+      become_method: runas
+      become: yes
+    
+    - win_reboot: 
+      when: reboot.changed
